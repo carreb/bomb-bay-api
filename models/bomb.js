@@ -18,9 +18,9 @@ const bombSchema = new mongoose.Schema({
         type: Date,
         default: Date.now(),
     },
-    expiredAt: {
-        type: Date,
-        required: true,
+    ttl: {
+        type: Number,
+        default: 30
     }
 })
 

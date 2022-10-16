@@ -13,10 +13,12 @@ db.once('open', () => console.log('Connected to MongoDB'))
 app.use(express.json())
 app.use(cors())
 
-const previousBombs = require('./routes/previousBombs.js')
+const previousBombs = require('./routes/previousbombs.js')
+const liveBombs = require('./routes/livebombs.js')
 
 // app index
 app.use('/history', previousBombs)
+app.use('/live', liveBombs)
 
 
 
