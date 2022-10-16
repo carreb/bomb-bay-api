@@ -1,7 +1,5 @@
 const router = require('express').Router();
 const express = require('express');
-const bomb = require('../models/bomb.js');
-// const { createIndexes } = require('../models/bomb.js');
 const Bomb = require('../models/bomb.js')
 const Bombs20Min = ['Combat XP Bomb', 'Profession XP Bomb', 'Loot Bomb']
 const Bombs10Min = ['Dungeon Bomb', 'Profession Speed Bomb']
@@ -80,6 +78,7 @@ async function preventDuplicateBombs(req, res, next) {
     console.log("preventDupe")
     console.log(res.locals.name)
     try {
+        console.log()
         bomb = await Bomb.findOne(
             {
                 throwerName: res.locals.name,
@@ -96,7 +95,7 @@ async function preventDuplicateBombs(req, res, next) {
     next()
 }
 
-// Find all bombs that have exceeded their time to live
+// Find all bombs that have exceeded their time to live & purge them
 async function purgeDeadBombs(req, res, next) {
     let bombs
     let purgedBombsCounter = 0
