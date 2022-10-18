@@ -33,6 +33,19 @@ router.get('/', parseQueries, async (req, res) => {
     }
 })
 
+router.post('/register', async (req, res) => {
+    for (let i = 0; i > req.body.bombs.length; i++) {
+        let newBombs = []
+        try {
+            const bomb = new Bomb(req.body.bombs[i])
+            const postedBomb = await bomb.save()
+            newBombs.push(postedBomb)
+        } catch(e) {
+            res.status(400).json({message: e.message})
+        }
+    }
+})
+
 
 // Middleware
 // Find all bombs with a specific type
@@ -66,7 +79,6 @@ async function parseQueries(req, res, next) {
             world: q.world
         }
         Object.keys(queryBuilder).forEach(key => queryBuilder[key] === undefined ? delete queryBuilder[key] : {});
-        console.log(queryBuilder)
         res.queries = queryBuilder
     }
     next()
