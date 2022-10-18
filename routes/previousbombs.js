@@ -11,18 +11,18 @@ const bombTypes = {
 
 
 // Returns tracked bombs with queries
-router.get('/', async (req, res) => {
+router.get('/', parseQueries, async (req, res) => {
     try {
         if (!isEmpty(req.query)) {
             // User input params
             // type=<bomb type>
             // nick=<thrower's nickname>
             // world=<world number (no wc)>
-            const allbombs = await Bomb.find({
-                bombType: bombTypes[req.query.type],
-                throwerName: req.query.nick,
-                world: req.query.world
-            });
+            const allbombs = await Bomb.find(res.queries);
+            if (allbombs.length == 0) {
+                return res.status(404).json({error: "No bombs were found with those parameters"});
+            }
+            res.json(allbombs)
         } else {
             const allbombs = await Bomb.find();
             res.json(allbombs)
@@ -54,6 +54,22 @@ async function findBombByType(req, res, next) {
 // generic check for if an object is empty
 function isEmpty(object) {
     return Object.keys(object).length === 0
+}
+
+// Parse queries
+async function parseQueries(req, res, next) {
+    const q = req.query;
+    if (!isEmpty(q)) {
+        let queryBuilder = {
+            bombType: bombTypes[q.type],
+            throwerName: q.nick,
+            world: q.world
+        }
+        Object.keys(queryBuilder).forEach(key => queryBuilder[key] === undefined ? delete queryBuilder[key] : {});
+        console.log(queryBuilder)
+        res.queries = queryBuilder
+    }
+    next()
 }
 
 

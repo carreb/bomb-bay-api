@@ -21,7 +21,7 @@ const bombSchema = new mongoose.Schema({
     expiredAt: {
         type: Date,
         required: true,
-        default: new Date((new Date().getTime() / 1000) + 1200)
+        default: new Date((new Date().getTime() / 1000 + 1200) * 1000)
     }
 })
 
