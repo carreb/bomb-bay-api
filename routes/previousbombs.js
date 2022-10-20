@@ -25,6 +25,9 @@ router.get('/', parseQueries, async (req, res) => {
             res.json(allbombs)
         } else {
             const allbombs = await Bomb.find();
+            if (allbombs.length == 0) {
+                return res.status(404).json({error: "no bombs were found, this is probably a database error and has nothing to do with your request."})
+            }
             res.json(allbombs)
         }
     } catch(e) {
@@ -40,6 +43,7 @@ router.post('/register', async (req, res) => {
             const bomb = new Bomb(req.body.bombs[i])
             const postedBomb = await bomb.save()
             newBombs.push(postedBomb)
+            res.status(200).json(newBombs)
         } catch(e) {
             res.status(400).json({message: e.message})
         }
