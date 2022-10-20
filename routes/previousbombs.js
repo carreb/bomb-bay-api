@@ -37,17 +37,17 @@ router.get('/', parseQueries, async (req, res) => {
 })
 
 router.post('/register', async (req, res) => {
-    for (let i = 0; i > req.body.bombs.length; i++) {
-        let newBombs = []
+    let newBombs = []
         try {
-            const bomb = new Bomb(req.body.bombs[i])
-            const postedBomb = await bomb.save()
-            newBombs.push(postedBomb)
-            res.status(200).json(newBombs)
-        } catch(e) {
+            for (let i = 0; i > req.body.bombs.length; i++) {
+                const bomb = new Bomb(req.body.bombs[i])
+                const postedBomb = await bomb.save()
+                newBombs.push(postedBomb)
+            }
+            res.status(204).json(newBombs)
+            } catch(e) {
             res.status(400).json({message: e.message})
         }
-    }
 })
 
 
